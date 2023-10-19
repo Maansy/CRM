@@ -18,11 +18,11 @@ export default {
     Navbar
   },
   beforeCreate(){
-    this.$store.commit('initialiseStore')
+    this.$store.commit('initializeStore')
     if (this.$store.state.token) {
       axios.defaults.headers.common['Authorization'] = "Token " + this.$store.state.token
     }else {
-      axios.defaults.headers.common['Authorization'] = null
+      axios.defaults.headers.common['Authorization'] = ''
     }
   }
 }

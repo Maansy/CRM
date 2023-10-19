@@ -54,12 +54,24 @@ const router = createRouter({
   routes
 })
 
+// router.beforeEach((to, from, next) => {
+//   if(to.matched.some(record => record.meta.requireLogin) && !store.getters.isAuthenticated){
+//     next('/login')
+//   } else {
+//     next()
+//   }
+// })
+
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requireLogin) && !store.getters.isAuthenticated){
-    next('/login')
+  if (to.matched.some(record => record.meta.requireLogin)) {
+    if (!store.state.isAuthenticated) {
+      next('/login'); // Redirect to login if not authenticated
+    } else {
+      next(); // Proceed to the route
+    }
   } else {
-    next()
+    next(); // No authentication required
   }
-})
+});
 
 export default router
