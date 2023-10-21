@@ -1,38 +1,36 @@
 version: '3'
+
 services:
-  backend:
+  django:
     build:
       context: ./Backend
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
+    container_name: django-container
     ports:
       - "8000:8000"
     volumes:
-      - ./CRM/Backend:/app
-    environment:
-      - DJANGO_DB_HOST=db
+      - ./Backend:/app
     depends_on:
       - db
+    env_file:
+      - .env
 
   frontend:
     build:
       context: ./Frontend/crm
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile
+    container_name: vue-container
     ports:
       - "8080:8080"
     volumes:
-      - ./CRM/Frontend:/app
+      - ./Frontend/crm:/app
 
   db:
     image: postgres
+    container_name: postgres-container
     environment:
-      POSTGRES_DB: crm
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-
-
-
-
-
-
-
-
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
