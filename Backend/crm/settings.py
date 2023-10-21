@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',  # Django CORS Headers
     'djoser',  # Django REST Framework JWT
     'lead',  # Django App
+    'team',  # Django App
 ]
 
 MIDDLEWARE = [

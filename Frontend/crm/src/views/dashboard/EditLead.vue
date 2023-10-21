@@ -2,51 +2,52 @@
     <div class="container">
         <div class="columns is-multiline">
             <div class="column is-12">
-                <h1 class="title">Add Lead</h1>
+                <h1 class="title">Edit {{ lead.company_name }}</h1>
             </div>
+
             <div class="column is-12">
                 <form @submit.prevent="submitForm">
                     <div class="field">
                         <label class="label">Company Name</label>
                         <div class="control">
-                            <input class="input" type="text" name="company_name" v-model="company_name">
+                            <input class="input" type="text" name="company_name" v-model="lead.company_name">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Contact Name</label>
                         <div class="control">
-                            <input class="input" type="text" name="contact_name" v-model="contact_name">
+                            <input class="input" type="text" name="contact_name" v-model="lead.contact_name">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Contact Email</label>
                         <div class="control">
-                            <input class="input" type="email" name="email" v-model="email">
+                            <input class="input" type="email" name="email" v-model="lead.email">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Contact Phone</label>
                         <div class="control">
-                            <input class="input" type="text" name="phone" v-model="phone">
+                            <input class="input" type="text" name="phone" v-model="lead.phone">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Website</label>
                         <div class="control">
-                            <input class="input" type="text" name="website" v-model="website">
+                            <input class="input" type="text" name="website" v-model="lead.website">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Confidence</label>
                         <div class="control">
-                            <input class="input" type="number" name="confidence" v-model="confidence">
+                            <input class="input" type="number" name="confidence" v-model="lead.confidence">
                         </div>
                     </div>
 
                     <div class="field">
                         <label class="label">Estimated Value</label>
                         <div class="control">
-                            <input class="input" type="number" name="estimated_value" v-model="estimated_value">
+                            <input class="input" type="number" name="estimated_value" v-model="lead.estimated_value">
                         </div>
                     </div>
 
@@ -54,7 +55,7 @@
                         <label class="label">Status</label>
                         <div class="control">
                             <div class="select">
-                                <select name="status" v-model="status">
+                                <select name="status" v-model="lead.status">
                                     <option value="new">New</option>
                                     <option value="contacted">Contacted</option>
                                     <option value="inprogress">In Progress</option>
@@ -68,7 +69,7 @@
                         <label class="label">Priority</label>
                         <div class="control">
                             <div class="select">
-                                <select name="priority" v-model="priority">
+                                <select name="priority" v-model="lead.priority">
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
@@ -78,63 +79,61 @@
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button class="button is-success">Submit</button>
+                            <button class="button is-success">Update</button>
                         </div>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </template>
 
-
 <script>
 import axios from 'axios';
-import { toast } from 'bulma-toast'
+import { toast } from 'bulma-toast';
 export default {
-    name: 'AddLead',
+    name: 'EditLead',
     data() {
         return {
-            company_name: '',
-            contact_name: '',
-            email: '',
-            website: '',
-            confidence: 0,
-            estimated_value: 0,
-            phone: '',
-            status: 'new',
-            priority: 'low'
+            lead: {}
         }
     },
+    mounted() {
+        this.getLead();
+    },
     methods: {
-        async submitForm() {
-            this.$store.commit('setIsLoading', true)
-            const lead = {
-                company_name: this.company_name,
-                contact_name: this.contact_name,
-                email: this.email,
-                website: this.website,
-                confidence: this.confidence,
-                estimated_value: this.estimated_value,
-                phone: this.phone,
-                status: this.status,
-                priority: this.priority
-            }
+        async getLead() {
+            this.$store.commit('setIsLoading', true);
+            const leadID = this.$route.params.id;
             await axios
-                .post('/api/v1/leads/', lead)
+                .get(`/api/v1/leads/${leadID}/`)
+                .then(response => {
+                    this.lead = response.data;
+                })
+                .catch(error => {
+                    console.log(JSON.stringify(error));
+                });
+            this.$store.commit('setIsLoading', false);
+        },
+        async submitForm(){
+            this.$store.commit('setIsLoading', true);
+            const leadID = this.$route.params.id;
+            await axios
+                .patch(`/api/v1/leads/${leadID}/`, this.lead)
                 .then(response => {
                     toast({
-                        message: `${this.company_name} added successfully`,
+                        message: `${this.lead.company_name} updated successfully`,
                         type: 'is-success',
                         position: 'bottom-right',
                         duration: 3000
                     })
-                    this.$router.push('/dashboard/leads')
+                    this.$router.push({name: 'Lead', params: {id: leadID}});
                 })
                 .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-            this.$store.commit('setIsLoading', false)
+                    console.log(JSON.stringify(error));
+                });
+            this.$store.commit('setIsLoading', false);
         }
     }
 }

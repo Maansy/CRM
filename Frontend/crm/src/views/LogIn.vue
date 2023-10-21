@@ -62,7 +62,6 @@ export default {
                     this.$store.commit('setToken', token)
                     axios.defaults.headers.common['Authorization'] = 'Token ' + token
                     localStorage.setItem('token', token)
-                    this.$router.push('/dashboard/my-account')
                 })
                 .catch(error => {
                         if (error.response) {
@@ -76,7 +75,35 @@ export default {
                         }
 
                     });
-            // this.$store.commit('setIsLoading', false)
+                await axios
+                    .get('/api/v1/users/me/') // default from djoser
+                    .then(response => {
+                        this.$store.commit('setUser', {
+                            'id': response.data.id,
+                            'username': response.data.username,
+
+                        })
+                        localStorage.setItem('user', JSON.stringify({
+                            'id': response.data.id,
+                            'username': response.data.username,
+                        }))
+                    })
+                    .catch(error => {
+                        console.log(JSON.stringify(error))
+                    })
+                await axios
+                    .get('/api/v1/teams/my-team/')
+                    .then(response => {
+                        this.$store.commit('setTeam', {
+                            'id': response.data[0].id,
+                            'name': response.data[0].name
+                        })
+                        this.$router.push('/dashboard')
+                    })
+                    .catch(error => {
+                        console.log(JSON.stringify(error))
+                    })
+            this.$store.commit('setIsLoading', false)
         }
     }
 }
