@@ -55,7 +55,8 @@ export default {
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
+
             this.errors = [];
             if (this.username === '') {
                 this.errors.push('Username required.');
@@ -67,11 +68,13 @@ export default {
                 this.errors.push('Passwords do not match.');
             }
             if (!this.errors.length) {
+                this.$store.commit('setIsLoading', true)
+
                 const formData = {
                     username: this.username,
                     password: this.password1
                 }
-                axios
+                await axios
                     .post('/api/v1/users/', formData)
                     .then(response => {
                         toast({
@@ -86,7 +89,7 @@ export default {
                     })
                     .catch(error => {
                         if (error.response) {
-                            for(const property in error.response.data) {
+                            for (const property in error.response.data) {
                                 this.errors.push(`${property}: ${error.response.data[property]}`);
                             }
                         } else if (error.request) {
@@ -96,6 +99,7 @@ export default {
                         }
 
                     });
+                this.$store.commit('setIsLoading', false)
             }
         }
     }

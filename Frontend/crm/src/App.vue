@@ -1,6 +1,9 @@
 <template>
   <div>
     <Navbar />
+    <div class="is-loading-bar has-text-centered" v-bind:class="{ 'is-loading': $store.state.isLoading }">
+      <div class="lds-dual-ring"></div>
+    </div>
     <section class="section">
       <div class="container">
         <router-view />
@@ -17,11 +20,11 @@ export default {
   components: {
     Navbar
   },
-  beforeCreate(){
+  beforeCreate() {
     this.$store.commit('initializeStore')
     if (this.$store.state.token) {
       axios.defaults.headers.common['Authorization'] = "Token " + this.$store.state.token
-    }else {
+    } else {
       axios.defaults.headers.common['Authorization'] = ''
     }
   }
@@ -29,4 +32,40 @@ export default {
 </script>
 <style lang="scss">
 @import '../node_modules/bulma';
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.is-loading-bar {
+  height: 0;
+  overflow: hidden;
+  -webkit-transition: all 0.3s;
+  background-color: #00d1b2;
+  transition: all 0.2s;
+  &.is-loading {
+    height: 80px;
+  }
+}
 </style>

@@ -1,0 +1,38 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./CRM/Backend:/app
+    environment:
+      - DJANGO_DB_HOST=db
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./Frontend/crm
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./CRM/Frontend:/app
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: crm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+
+
+
+
+
+
+
