@@ -13,6 +13,7 @@
                         <tr>
                             <th>Company</th>
                             <th>Contact Person</th>
+                            <th>Assigned to</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -21,6 +22,11 @@
                         <tr v-for="lead in leads" v-bind:key="lead.id">
                             <td>{{ lead.company_name }}</td>
                             <td>{{ lead.contact_name }}</td>
+                            <td>
+                                <template v-if="lead.assigned_to">
+                                    {{ lead.assigned_to.username }}
+                                </template>
+                            </td>
                             <td>{{ lead.status }}</td>
                             <td>
                                 <router-link :to="{ name: 'Lead', params: { id: lead.id } }"

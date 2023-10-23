@@ -98,7 +98,7 @@ export default {
                             'id': response.data[0].id,
                             'name': response.data[0].name
                         })
-                        this.$router.push('/dashboard')
+                        this.$router.push('/dashboard/my-account')
                     })
                     .catch(error => {
                         console.log(JSON.stringify(error))

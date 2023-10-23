@@ -23,6 +23,8 @@
                 </template>
                 <template v-else>
                     <router-link to="/dashboard/leads" class="navbar-item">Leads</router-link>
+                    <router-link to="/dashboard/clients" class="navbar-item">Clients</router-link>
+                    <router-link to="/dashboard/team" class="navbar-item">Team</router-link>
                     <router-link to="/dashboard/my-account" class="navbar-item">Account</router-link>
                 </template>
             </div>

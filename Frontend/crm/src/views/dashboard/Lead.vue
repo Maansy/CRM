@@ -23,6 +23,9 @@
                     <p><strong>Contact Email: </strong>{{ lead.email }}</p>
                     <p><strong>Contact Phone: </strong>{{ lead.phone }}</p>
                     <p><strong>Website: </strong>{{ lead.website }}</p>
+                    <template v-if="lead.assigned_to">
+                        <p><strong>Assigned to: </strong>{{ lead.assigned_to.username }}</p>
+                    </template>
                 </div>
             </div>
         </div>

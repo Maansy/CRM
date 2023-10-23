@@ -77,6 +77,21 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="field">
+                        <label class="label">Assigned to</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="priority" v-model="lead.assigned_to">
+                                    <option value="">Select Member</option>
+                                    <option v-for="member in team.members" v-bind:key="member.id" v-bind:value="member.id">
+                                        {{ member.username }}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="field">
                         <div class="control">
                             <button class="button is-success">Update</button>
@@ -96,11 +111,15 @@ export default {
     name: 'EditLead',
     data() {
         return {
-            lead: {}
+            lead: {},
+            team: {
+                members: [],
+            }
         }
     },
     mounted() {
         this.getLead();
+        this.getTeam();
     },
     methods: {
         async getLead() {
@@ -116,7 +135,7 @@ export default {
                 });
             this.$store.commit('setIsLoading', false);
         },
-        async submitForm(){
+        async submitForm() {
             this.$store.commit('setIsLoading', true);
             const leadID = this.$route.params.id;
             await axios
@@ -128,12 +147,24 @@ export default {
                         position: 'bottom-right',
                         duration: 3000
                     })
-                    this.$router.push({name: 'Lead', params: {id: leadID}});
+                    this.$router.push({ name: 'Lead', params: { id: leadID } });
                 })
                 .catch(error => {
                     console.log(JSON.stringify(error));
                 });
             this.$store.commit('setIsLoading', false);
+        },
+        async getTeam() {
+            this.$store.commit('setIsLoading', true)
+            await axios
+                .get('/api/v1/teams/my-team/')
+                .then(response => {
+                    this.team = response.data[0]
+                })
+                .catch(error => {
+                    console.log(JSON.stringify(error))
+                })
+            this.$store.commit('setIsLoading', false)
         }
     }
 }

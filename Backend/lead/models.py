@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from team.models import Team
 # Create your models here.
 
 class Lead(models.Model):
@@ -27,7 +28,7 @@ class Lead(models.Model):
         (HIGH, 'High'),
     )
 
-
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='leads', default=1)
     company_name = models.CharField(max_length=100)
     contact_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
@@ -39,7 +40,9 @@ class Lead(models.Model):
     priority = models.CharField(max_length=100, blank=True, null=True, choices=CHOICES_PRIORITY, default=MEDIUM)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='leads_assigned', blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='leads')
+
 
     def __str__(self):
         return self.company_name

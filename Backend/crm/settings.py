@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'djoser',  # Django REST Framework JWT
     'lead',  # Django App
     'team',  # Django App
+    'client',  # Django App
 ]
 
 MIDDLEWARE = [
