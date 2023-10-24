@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Client
+from .models import Client, Note
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,6 +12,19 @@ class ClientSerializer(serializers.ModelSerializer):
             'email',
             'phone',
             'website',
+            'created_at',
+            'updated_at',
+        )
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        read_only_fields = ('created_at', 'updated_at')
+        fields = (
+            'id',
+            'name',
+            'body',
+            'client',
             'created_at',
             'updated_at',
         )

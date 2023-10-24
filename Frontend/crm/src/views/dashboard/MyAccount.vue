@@ -5,7 +5,12 @@
                 <h1 class="title">My Account</h1>
             </div>
             <div class="column is-12">
+                <div class="buttons">
+                    <router-link :to="{ name: 'EditMember', params: { id: $store.state.user.id } }"
+                                        class="button is-primary">Edit</router-link>
+                                    
                 <button @click="logout()" class="button is-danger">Log Out</button>
+            </div>
             </div>
         </div>
     </div>
