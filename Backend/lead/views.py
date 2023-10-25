@@ -1,13 +1,20 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, filters
 from .models import Lead
 from .serializers import LeadSerializer
 from team.models import Team
 from django.contrib.auth.models import User
+from rest_framework.pagination import PageNumberPagination 
+
+class LeadPagination(PageNumberPagination):
+    page_size = 10
 
 class LeadViewSet(viewsets.ModelViewSet):
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer
+    pagination_class = LeadPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('company_name','contact_name')
 
     def get_queryset(self):
         team = Team.objects.filter(members__in=[self.request.user]).first()

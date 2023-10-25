@@ -3,7 +3,10 @@
         <div class="columns is-multiline">
             <div class="column is-12">
                 <h1 class="title">{{ lead.company_name }}</h1>
-                <router-link :to="{name : 'EditLead', params:{id:lead.id}}"  class="button is-light">Edit</router-link>
+                <div class="buttons">
+                    <router-link :to="{ name: 'EditLead', params: { id: lead.id } }" class="button is-light">Edit</router-link>
+                    <button @click="convert_to_client" class="button is-info">Convert to client</button>
+                </div>
             </div>
             <div class="column is-6">
                 <div class="box">
@@ -24,7 +27,8 @@
                     <p><strong>Contact Phone: </strong>{{ lead.phone }}</p>
                     <p><strong>Website: </strong>{{ lead.website }}</p>
                     <template v-if="lead.assigned_to">
-                        <p><strong>Assigned to: </strong>{{ lead.assigned_to.username }}</p>
+                        <p><strong>Assigned to: </strong>{{ lead.assigned_to.first_name }} {{ lead.assigned_to.last_name }}
+                        </p>
                     </template>
                 </div>
             </div>
@@ -52,12 +56,31 @@ export default {
             await axios
                 .get(`/api/v1/leads/${leadID}/`)
                 .then(response => {
-                this.lead = response.data;
-            })
+                    this.lead = response.data;
+                })
                 .catch(error => {
-                console.log(JSON.stringify(error));
-            });
+                    console.log(JSON.stringify(error));
+                });
             this.$store.commit('setIsLoading', false);
+        },
+        async convert_to_client() {
+            this.$store.commit('setIsLoading', true);
+            const leadID = this.$route.params.id;
+            const data = {
+                lead_id: leadID
+            }
+            await axios
+                .post(`/api/v1/convert-lead-to-client/`, data)
+                .then(response => {
+                    console.log("Converted to client");
+                    this.$router.push({ name: 'Clients'});
+                })
+                .catch(error => {
+                    console.log(JSON.stringify(error));
+                });
+
+            this.$store.commit('setIsLoading', false);
+
         }
     }
 }
