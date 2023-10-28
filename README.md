@@ -4,7 +4,8 @@
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=maansy&label=Profile%20views&color=0e75b6&style=flat" alt="maansy" /> </p>
 
 - 🌱 This application is a CRM application that runs on Docker using **Django, Vue, and PostgreSQL**
-- You can run it by running this command **bash run.sh** and Don't forget to make a superuser by going throw the django-image and run **python3 manage.py createsuperuser**
+
+- 💬 You can run it by running this command **bash run.sh** and Don't forget to make a superuser by going throw the django-image and run **python3 manage.py createsuperuser**
 
 - 🔭 I’m currently working on [Recruitment application](https://github.com/Maansy/Recruitment)
 
