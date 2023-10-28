@@ -6,23 +6,37 @@
             </div>
             <div class="column is-12">
                 <div class="buttons">
-                    <router-link :to="{ name: 'EditMember', params: { id: $store.state.user.id } }"
-                                        class="button is-primary">Edit</router-link>
-                                    
-                <button @click="logout()" class="button is-danger">Log Out</button>
-            </div>
+                    <router-link :to="{ name: 'EditMember', params: { id: parseInt(user.id) } }"
+                        class="button is-primary">Edit</router-link>
+
+                    <button @click="logout()" class="button is-danger">Log Out</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
-
 <script>
 import axios from 'axios'
 export default {
     name: 'MyAccount',
+    data() {
+        return {
+            user: {
+                id: '',
+                username: ''
+            }
+        }
+    },
+    mounted() {
+        this.getuser()
+    },
     methods: {
+        getuser() {
+            this.user = JSON.parse(localStorage.getItem('user'))
+        },
         async logout() {
+
             await axios
                 .post('/api/v1/token/logout/')
                 .then(response => {
@@ -37,6 +51,10 @@ export default {
             localStorage.removeItem('user')
             localStorage.removeItem('team_id')
             localStorage.removeItem('team_name')
+            localStorage.removeItem('plan')
+            localStorage.removeItem('max_clients')
+            localStorage.removeItem('max_leads')
+
             this.$store.commit('removeToken')
 
 

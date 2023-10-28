@@ -3,8 +3,14 @@
         <div class="columns is-multiline">
             <div class="column is-12">
                 <h1 class="title">Clients</h1>
-
-                <router-link to="/dashboard/clients/add-client" class="button is-primary">Add Client</router-link>
+                <template v-if="$store.state.team.max_clients > count">
+                    <router-link to="/dashboard/clients/add-client" class="button is-primary">Add Client</router-link>
+                </template>
+                <template v-else>
+                    <div class="notification is-danger">
+                        <p><strong>You can't add more clients, upgrade your plan to add more clients </strong></p>
+                    </div>
+                </template>
                 <hr>
                 <form @submit.prevent="submitForm">
                     <div class="field has-addons">
@@ -69,13 +75,26 @@ export default {
             showNextButton: false,
             showPreviousButton: false,
             currentPage: 1,
-            query: ''
+            query: '',
+            count: 0
         };
     },
     mounted() {
         this.getClients();
+        this.gitClientsCount();
     },
     methods: {
+        async gitClientsCount(){
+            await axios
+                .get('/api/v1/clients/')
+                .then(response => {
+                    this.count = response.data.count
+                })
+                .catch(error => {
+                    console.log(JSON.stringify(error))
+                })
+        },
+        
         goTONextPage() {
             this.currentPage += 1;
             this.getClients();

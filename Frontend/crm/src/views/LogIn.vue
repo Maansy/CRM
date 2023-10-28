@@ -93,10 +93,14 @@ export default {
                     })
                 await axios
                     .get('/api/v1/teams/my-team/')
-                    .then(response => {
+                    .then(response => {                        
                         this.$store.commit('setTeam', {
                             'id': response.data[0].id,
-                            'name': response.data[0].name
+                            'name': response.data[0].name,
+                            'max_clients': response.data[0].plan.max_clients,
+                            'max_leads': response.data[0].plan.max_leads,
+                            'plan': response.data[0].plan.name,
+
                         })
                         this.$router.push('/dashboard/my-account')
                     })

@@ -23,6 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
+# strip
+STRIPE_PUB_KEY = 'pk_test_51O6FfiCPlb6OgBYTTtNVQhyhaNBiwTNrT2KfyuXOi8zjopPigOBqqHCx0KTWxO93ks5iuuStW3PAJy2ZYnmn6vS300jEVHSn0K'
+STRIPE_SECRET_KEY = 'sk_test_51O6FfiCPlb6OgBYTGZfUHyHesnm1Y1TFAF3vbPyLw8zotPtAoZATwmuG4iSsuAp7NHZJWBlFkTSwjzcXkMptPqof00hXweSPZn'
+
+STRIPE_PRICE_ID_SMALL_TEAM = 'price_1O6KCCCPlb6OgBYTddMJivZD'
+STRIPE_PRICE_ID_BIG_TEAM = 'price_1O6FlsCPlb6OgBYTtf7Pjy3s'
+
+STRIPE_WEBHOOK_KEY = 'whsec_90641311a97ea0cb2729695b867757ab511f90a9854fd85a0d6457613fb72359'
+
+FRONTEND_WEBSITE_SUCCESS_URL = 'http://localhost:8080/#/dashboard/team/plans/thankyou'
+FRONTEND_WEBSITE_CANCEL_URL = 'http://localhost:8080/#/dashboard/team/plans'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 

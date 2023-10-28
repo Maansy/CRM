@@ -3,8 +3,14 @@
         <div class="columns is-multiline">
             <div class="column is-12">
                 <h1 class="title">Leads</h1>
-
-                <router-link to="/dashboard/leads/add" class="button is-primary">Create Lead</router-link>
+                <template v-if="$store.state.team.max_leads > count">
+                    <router-link to="/dashboard/leads/add" class="button is-primary">Create Lead</router-link>
+                </template>
+                <template v-else>
+                    <div class="notification is-danger">
+                        <p><strong>You can't add more leads, upgrade your plan to add more leads </strong></p>
+                    </div>
+                </template>
                 <hr>
                 <form @submit.prevent="submitForm">
                     <div class="field has-addons">
@@ -72,12 +78,24 @@ export default {
             showPreviousButton: false,
             currentPage: 1,
             query: '',
+            count: 0
         };
     },
     mounted() {
         this.getLeads();
+        this.getLeadsCount();
     },
     methods: {
+        async getLeadsCount(){
+            await axios
+                .get('/api/v1/leads/')
+                .then(response => {
+                    this.count = response.data.count
+                })
+                .catch(error => {
+                    console.log(JSON.stringify(error))
+                })
+        },
         goTONextPage() {
             this.currentPage += 1;
             this.getLeads()
